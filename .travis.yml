@@ -27,11 +27,12 @@ install:
     - mkdir src
     - git clone --depth=1 http://git.code.sf.net/p/tempo/tempo src/tempo
     - git clone --depth=1 https://bitbucket.org/psrsoft/tempo2.git src/tempo2
-script:
     # Use current date for version
     - export VERSION=$(date +%Y.%m.%d)
+script:
     - conda build ./recipe
 after_success:
     - conda install anaconda-client
-    - export PKGFILE=$(conda build recipe-tempo --output)
+    - conda activate
+    - export PKGFILE=$(conda build recipe --output)
     - anaconda -t $CONDA_UPLOAD_TOKEN upload -u demorest --force $PKGFILE
