@@ -1,0 +1,37 @@
+language: fortran
+compiler:
+    - gcc
+os:
+    - linux
+before_install:
+    - MINICONDA_VERSION=latest
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then MINICONDA_OS=Linux; else MINICONDA_OS=MacOSX; fi
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then MINICONDA_PY=2; else MINICONDA_PY=3; fi
+    - wget https://repo.anaconda.com/miniconda/Miniconda$MINICONDA_PY-$MINICONDA_VERSION-$MINICONDA_OS-x86_64.sh -O miniconda.sh
+    - bash miniconda.sh -b -p "$HOME"/miniconda
+    - source "$HOME"/miniconda/etc/profile.d/conda.sh
+    - hash -r 
+    - conda config --set always_yes yes --set changeps1 no
+    - conda config --add channels conda-forge
+    - conda config --add channels demorest
+    - conda update -q conda
+    - conda install conda-build
+    - conda info -a
+    - export LANG=en_US.UTF-8
+install:
+    # Get latest tempos.  If we want the specific version where the
+    # clockfiles were updated, would need to check out with larger
+    # depth and then somehow determine version from the git history.
+    # Also would be nice to not have to download the entire huge
+    # repositories each time...
+    - mkdir src
+    - git clone --depth=1 http://git.code.sf.net/p/tempo/tempo src/tempo
+    - git clone --depth=1 https://bitbucket.org/psrsoft/tempo2.git src/tempo2
+script:
+    # Use current date for version
+    - export VERSION=$(date +%Y.%m.%d)
+    - conda build ./recipe
+after_success:
+    - conda install anaconda-client
+    - export PKGFILE=$(conda build recipe-tempo --output)
+    - anaconda -t $CONDA_UPLOAD_TOKEN upload -u demorest --force $PKGFILE

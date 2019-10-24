@@ -1,0 +1,18 @@
+package:
+    name: tempo-clockfiles
+    version: {{ os.environ.get('VERSION') }} 
+
+source:
+    # Assumes source has been checked out here:
+    path: ../src
+
+build:
+    number: 1
+    noarch: generic
+
+requirements:
+    build:
+        - perl
+        - wget
+    host:
+    run:
