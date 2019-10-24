@@ -35,7 +35,9 @@ echo 'ut1.dat updated directly from IERS C04 series' >> $rdme
 
 # Update EOP
 cd T2runtime/earth
-wget -N https://hpiers.obspm.fr/iers/eop/eopc04/eopc04_IAU2000.62-now
+#wget -N https://hpiers.obspm.fr/iers/eop/eopc04/eopc04_IAU2000.62-now
+wget https://datacenter.iers.org/data/latestVersion/224_EOP_C04_14.62-NOW.IAU2000A224.txt
+mv 224_EOP_C04_14.62-NOW.IAU2000A224.txt eopc04_IAU2000.62-now
 cd $SRC_DIR/tempo2
 
 # Get ut1.dat from tempo
