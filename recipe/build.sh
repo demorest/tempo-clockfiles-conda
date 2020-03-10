@@ -13,10 +13,12 @@ echo >> $rdme
 echo 'ut1.dat updated directly from IERS C04 series' >> $rdme
 
 # Update ut1.dat
-util/ut1/get_ut1
-util/ut1/make_ut1 > clock/ut1.dat
+cd util/ut1
+./get_ut1_new
+./make_ut1 > ../../clock/ut1.dat
 
 # Install everything
+cd $SRC_DIR/tempo
 tempodir=$PREFIX/share/tempo
 mkdir -p $tempodir
 cp -a clock $tempodir
@@ -36,8 +38,9 @@ echo 'ut1.dat updated directly from IERS C04 series' >> $rdme
 # Update EOP
 cd T2runtime/earth
 #wget -N https://hpiers.obspm.fr/iers/eop/eopc04/eopc04_IAU2000.62-now
-wget https://datacenter.iers.org/data/latestVersion/224_EOP_C04_14.62-NOW.IAU2000A224.txt
-mv 224_EOP_C04_14.62-NOW.IAU2000A224.txt eopc04_IAU2000.62-now
+#wget https://datacenter.iers.org/data/latestVersion/224_EOP_C04_14.62-NOW.IAU2000A224.txt
+#mv 224_EOP_C04_14.62-NOW.IAU2000A224.txt eopc04_IAU2000.62-now
+cp $SRC_DIR/tempo/util/ut1/224_EOP_C04_14.62-NOW.IAU2000A224.txt eopc04_IAU2000.62-now
 cd $SRC_DIR/tempo2
 
 # Get ut1.dat from tempo
